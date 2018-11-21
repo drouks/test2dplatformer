@@ -7,12 +7,17 @@ import java.util.LinkedList;
 
 import com.drouks.cpg.framework.GameObject;
 import com.drouks.cpg.framework.ObjectId;
+import com.drouks.cpg.framework.Texture;
+import com.drouks.cpg.window.Game;
 
 public class Block extends GameObject {
+	
+	Texture tex = Game.getInstance();
+	private int type;
 
-	public Block(float x, float y, ObjectId id) {
+	public Block(float x, float y, int type, ObjectId id) {
 		super(x, y, id);
-		// TODO Auto-generated constructor stub
+		this.type = type;
 	}
 
 	
@@ -23,8 +28,12 @@ public class Block extends GameObject {
 	
 	public void render(Graphics g) {
 		
-		g.setColor(Color.white);
-		g.drawRect((int)x, (int)y, 32, 32);
+		if(type==0)
+		g.drawImage(tex.block[0], (int)x, (int)y,null);
+		if(type==1)
+			g.drawImage(tex.block[1], (int)x, (int)y,null);
+		
+		
 		
 		
 	}

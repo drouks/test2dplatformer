@@ -9,6 +9,7 @@ import java.util.Random;
 
 import com.drouks.cpg.framework.KeyInput;
 import com.drouks.cpg.framework.ObjectId;
+import com.drouks.cpg.framework.Texture;
 import com.drouks.cpg.objects.Block;
 import com.drouks.cpg.objects.Player;
 
@@ -20,10 +21,12 @@ public class Game extends Canvas implements Runnable{
 	private Thread thread;
 	Handler handler;
 	Camera cam;
+	static Texture tex;
 	
 	public static int WIDTH, HEIGHT;
 	
-	private BufferedImage level = null;
+	private BufferedImage level = null, levelbg = null;
+	
     
 	Block block;
 	Random rand = new Random();
@@ -43,8 +46,11 @@ public class Game extends Canvas implements Runnable{
     	WIDTH = getWidth();
     	HEIGHT = getHeight();
     	
+    	tex = new Texture();
+    	
     	BufferedImageLoader loader = new BufferedImageLoader();
     	level = loader.loadImage("/level.png"); //levelload
+    	levelbg = loader.loadImage("/levelbg.png");
     	handler = new Handler();
     	
     	cam = new Camera(0,0);
@@ -99,6 +105,9 @@ public class Game extends Canvas implements Runnable{
 			if(handler.object.get(i).getId() == ObjectId.Player)
 			{
 				cam.tick(handler.object.get(i));
+				System.out.println("Player speed X: "+handler.object.get(i).getVelX()+" Y: "+handler.object.get(i).getVelY());
+				
+				
 			}
 		}
 		
@@ -118,14 +127,20 @@ public class Game extends Canvas implements Runnable{
 		//----------------//
 		
 			
-		g.setColor(Color.black);
+		g.setColor(new Color(0, 10, 28));
 		g.fillRect(0, 0, getWidth(), getHeight());
 	
+		
 		g2d.translate(cam.getX(), cam.getY()); //begin of cam
 		
+		for(int xx= -levelbg.getWidth(); xx<levelbg.getWidth()*5;xx+= levelbg.getWidth())
+		{
+			g.drawImage(levelbg, xx, 0, null);
+		}
 		
 		handler.render(g);
 		
+	
 		
 		g2d.translate(-cam.getX(), -cam.getY()); //end of cam
 		//===============//
@@ -150,16 +165,31 @@ public class Game extends Canvas implements Runnable{
 				
 				if(red==255 & green == 255 & blue == 255) //checks if block
 				{
-					handler.addObject(new Block(xx*32,yy*32,ObjectId.Block));
+					handler.addObject(new Block(xx*32,yy*32,0,ObjectId.Block));
 				}
 				if(red==0 & green == 0 & blue == 255) //checks if player
 				{
 					handler.addObject(new Player(xx*32,yy*32,handler,ObjectId.Player));
 				}
+				if(red==164 & green == 164 & blue == 164) 
+				{
+					handler.addObject(new Block(xx*32,yy*32,1,ObjectId.Block));
+				}
+				if(red==53 & green == 53 & blue == 53) 
+				{
+					handler.addObject(new Block(xx*32,yy*32,2,ObjectId.Block));
+				}
+			
+			
 			}
 
 		}
 		
+	}
+	
+	public static Texture getInstance()
+	{
+		return tex;
 	}
 	
 	public static void main(String args[])
@@ -168,4 +198,5 @@ public class Game extends Canvas implements Runnable{
 		  new Window(600,800,"CPG", game);
 		  game.start();
 	}
+	
 }

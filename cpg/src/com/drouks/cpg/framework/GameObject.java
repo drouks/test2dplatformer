@@ -9,23 +9,15 @@ public abstract class GameObject {
 	protected float x,y;
 	protected ObjectId id;
 	protected float velX = 0, velY = 0;
-	protected boolean falling = true;
-	protected boolean jumping = false;
+    protected boolean onGround = true;
 	
-	public boolean isFalling() {
-		return falling;
+
+	public boolean isOnGround() {
+		return onGround;
 	}
 
-	public void setFalling(boolean falling) {
-		this.falling = falling;
-	}
-
-	public boolean isJumping() {
-		return jumping;
-	}
-
-	public void setJumping(boolean jumping) {
-		this.jumping = jumping;
+	public void setOnGround(boolean onGround) {
+		this.onGround = onGround;
 	}
 
 	public GameObject(float x, float y, ObjectId id)
